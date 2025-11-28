@@ -1,0 +1,6 @@
+@PhoneValidate_HostAddress = http://localhost:5029
+
+GET {{PhoneValidate_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

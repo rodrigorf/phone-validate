@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="PhoneValidate.Application.Service/PhoneValidate.Application.Service.csproj" Id="45cfef09-06c9-4918-b701-c530b5d37019" />
+    <Project Path="PhoneValidate.Domain.Service/PhoneValidate.Domain.Service.csproj" Id="64d6d9e5-5e7a-4150-8e44-600d261c00b0" />
+    <Project Path="PhoneValidate.Infra.Data/PhoneValidate.Infra.Data.csproj" Id="2d3cfb8c-d65a-4957-8919-bd0193a487c9" />
+    <Project Path="PhoneValidate/PhoneValidate.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="PhoneValidate.Unit.Tests/PhoneValidate.Unit.Tests.csproj" Id="a911727f-b224-4732-9c43-6661919d835d" />
+  </Folder>
+</Solution>
