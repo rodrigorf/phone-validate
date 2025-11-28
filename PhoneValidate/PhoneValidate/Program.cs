@@ -1,9 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using PhoneValidate.Infra.Data; // ou o namespace correto do seu DbContext
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
+builder.Services.AddDbContext<PhoneValidateDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
