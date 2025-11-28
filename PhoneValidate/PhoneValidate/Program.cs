@@ -1,8 +1,20 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PhoneValidate.Infra.Data;
 using PhoneValidation.Extensions;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Log highlighting
+builder.Logging.AddSimpleConsole(options =>
+{
+    options.ColorBehavior = Microsoft.Extensions.Logging.Console.LoggerColorBehavior.Enabled;
+    options.SingleLine = false;
+    options.IncludeScopes = true;
+    options.TimestampFormat = "HH:mm:ss ";
+});
 
 builder.Services.AddControllers();
 
@@ -13,6 +25,31 @@ builder.Services.AddDbContext<PhoneValidateDbContext>(options =>
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<PhoneValidateDbContext>("database");
 
+//Authentication
+var jwtKey = builder.Configuration["Jwt:Key"]
+    ?? throw new InvalidOperationException("JWT Key is missing in configuration.");
+var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+var jwtAudience = builder.Configuration["Jwt:Audience"];
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = jwtIssuer,
+            ValidateAudience = true,
+            ValidAudience = jwtAudience,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+builder.Services.AddAuthorization();
+
+//Swagger
 builder.Services.AddSwaggerConfiguration();
 
 var app = builder.Build();

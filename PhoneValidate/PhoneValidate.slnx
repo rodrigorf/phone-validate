@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="docker-compose.yml" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="PhoneValidate.Application.Service/PhoneValidate.Application.Service.csproj" Id="45cfef09-06c9-4918-b701-c530b5d37019" />
     <Project Path="PhoneValidate.Domain.Service/PhoneValidate.Domain.Service.csproj" Id="64d6d9e5-5e7a-4150-8e44-600d261c00b0" />
