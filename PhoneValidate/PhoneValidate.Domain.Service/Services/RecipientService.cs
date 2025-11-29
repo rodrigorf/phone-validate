@@ -7,18 +7,18 @@ namespace PhoneValidate.Domain.Service.Services
 {
     public class RecipientService : IRecipientService
     {
-        private readonly IBaseRepository<Recipients> _repository;
+        private readonly IBaseRepository<Recipient> _repository;
         private readonly ILogger<RecipientService> _logger;
 
         public RecipientService(
-            IBaseRepository<Recipients> repository,
+            IBaseRepository<Recipient> repository,
             ILogger<RecipientService> logger)
         {
             _repository = repository;
             _logger = logger;
         }
 
-        public async Task<Recipients?> GetByPhoneNumberAsync(string phoneNumber)
+        public async Task<Recipient?> GetByPhoneNumberAsync(string phoneNumber)
         {
             _logger.LogInformation("Getting recipient by phone number: {PhoneNumber}", phoneNumber);
 
@@ -27,13 +27,13 @@ namespace PhoneValidate.Domain.Service.Services
             return recipient;
         }
 
-        public async Task<Recipients?> GetByIdAsync(Guid id)
+        public async Task<Recipient?> GetByIdAsync(Guid id)
         {
             _logger.LogInformation("Getting recipient by ID: {Id}", id);
             return await _repository.GetByIdAsync(id);
         }
 
-        public async Task<Result<Recipients>> CreateAsync(Recipients recipient)
+        public async Task<Result<Recipient>> CreateAsync(Recipient recipient)
         {
             _logger.LogInformation("Creating new recipient with phone: {PhoneNumber}", recipient.PhoneNumber);
 
@@ -42,7 +42,7 @@ namespace PhoneValidate.Domain.Service.Services
             {
                 var message = $"Phone number '{recipient.PhoneNumber}' is invalid.";
                 _logger.LogWarning(message);
-                return Result<Recipients>.Fail(message);
+                return Result<Recipient>.Fail(message);
             }
 
             recipient.PhoneNumber = normalizedPhone;
@@ -50,7 +50,7 @@ namespace PhoneValidate.Domain.Service.Services
             if (exists)
             {
                 _logger.LogWarning("Recipient already exists with phone: {PhoneNumber}", recipient.PhoneNumber);
-                return Result<Recipients>.Fail($"A recipient with phone number '{recipient.PhoneNumber}' already exists.");
+                return Result<Recipient>.Fail($"A recipient with phone number '{recipient.PhoneNumber}' already exists.");
             }
 
             recipient.Id = Guid.NewGuid();
@@ -60,35 +60,35 @@ namespace PhoneValidate.Domain.Service.Services
             await _repository.SaveChangesAsync();
 
             _logger.LogInformation("Recipient created successfully with ID: {Id}", recipient.Id);
-            return Result<Recipients>.Ok(recipient);
+            return Result<Recipient>.Ok(recipient);
         }
 
-        public async Task<Recipients?> UpdateAsync(Guid id, string phoneNumber)
+        public async Task<Result<Recipient?>> UpdateAsync(Guid id, Recipient recipients)
         {
             _logger.LogInformation("Updating recipient ID: {Id}", id);
 
-            var recipient = await _repository.GetByIdAsync(id);
-            if (recipient == null)
+            var foundRecipient = await _repository.GetByIdAsync(id);
+            if (foundRecipient == null)
             {
                 _logger.LogWarning("Recipient not found for update, ID: {Id}", id);
-                return null;
+                return Result<Recipient?>.Fail($"A recipient with ID '{id}' does not exist.");
             }
 
-            var exists = await _repository.AnyAsync(r => r.PhoneNumber == phoneNumber && r.Id != id);
+            var exists = await _repository.AnyAsync(r => r.PhoneNumber == foundRecipient.PhoneNumber && r.Id != id);
             if (exists)
             {
-                _logger.LogWarning("Phone number {PhoneNumber} already exists for another recipient", phoneNumber);
-                throw new InvalidOperationException($"Phone number {phoneNumber} already exists");
+                _logger.LogWarning("Phone number {PhoneNumber} already exists for another recipient", foundRecipient.PhoneNumber);
+                return Result<Recipient?>.Fail($"A recipient with phone number '{foundRecipient.PhoneNumber}' already exists.");
             }
 
-            recipient.PhoneNumber = phoneNumber;
-            recipient.UpdatedAt = DateTime.UtcNow;
+            foundRecipient.UpdatedAt = DateTime.UtcNow;
+            foundRecipient.PhoneNumber = recipients.PhoneNumber;
 
-            _repository.Update(recipient);
+            _repository.Update(foundRecipient);
             await _repository.SaveChangesAsync();
 
             _logger.LogInformation("Recipient updated successfully, ID: {Id}", id);
-            return recipient;
+            return Result<Recipient?>.Ok(foundRecipient);
         }
 
         public async Task<bool> DeleteAsync(Guid id)

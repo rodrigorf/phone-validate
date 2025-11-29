@@ -30,5 +30,15 @@ namespace PhoneValidate.Application.Service.Services
 
             return Result<RecipientsDto>.Ok(result.Data!.ToDto());
         }
+
+        public async Task<Result<RecipientsDto>> UpdateRecipientAsync(Guid id, RecipientsDto recipientsDto)
+        {
+            var result = await _recipientService.UpdateAsync(id, recipientsDto.ToModel());
+
+            if (!result.Success)
+                return Result<RecipientsDto>.Fail(result.ErrorMessage!);
+
+            return Result<RecipientsDto>.Ok(result.Data!.ToDto());
+        }
     }
 }

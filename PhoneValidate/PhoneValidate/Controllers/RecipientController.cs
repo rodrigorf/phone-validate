@@ -49,5 +49,22 @@ namespace PhoneValidate.Controllers
 
             return CreatedAtAction(nameof(Get), new { phoneNumber = result.Data!.PhoneNumber }, result.Data);
         }
+
+        [Authorize]
+        [HttpPut("{id}", Name = "UpdateRecipient")]
+        public async Task<ActionResult<RecipientsDto>> Put(Guid id, RecipientsDto recipientsDto)
+        {
+            var result = await _recipientAppService.UpdateRecipientAsync(id, recipientsDto);
+
+            if (!result.Success)
+            {
+                if (result.ErrorMessage!.Contains("not found"))
+                    return NotFound(new { message = result.ErrorMessage });
+
+                return Conflict(new { message = result.ErrorMessage });
+            }
+
+            return Ok(result.Data);
+        }
     }
 }

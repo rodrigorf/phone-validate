@@ -5,7 +5,7 @@ namespace PhoneValidate.Application.Services.Mapping
 {
     public static class RecipientsMappingExtensions
     {
-        public static RecipientsDto? ToDto(this Recipients? source)
+        public static RecipientsDto? ToDto(this Recipient? source)
         {
             if (source is null)
                 return null;
@@ -18,9 +18,9 @@ namespace PhoneValidate.Application.Services.Mapping
             };
         }
 
-        public static Recipients ToModel(this RecipientsDto? dto)
+        public static Recipient ToModel(this RecipientsDto? dto)
         {
-            var recipient = new Recipients
+            var recipient = new Recipient
             {
                 Id = Guid.NewGuid(),
                 PhoneNumber = dto.PhoneNumber,

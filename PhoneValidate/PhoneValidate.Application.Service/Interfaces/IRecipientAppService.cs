@@ -7,5 +7,6 @@ namespace PhoneValidate.Application.Services.Interfaces
     {
         Task<RecipientsDto> GetRecipientAsync(string phoneNumber);
         Task<Result<RecipientsDto>> CreateRecipient(RecipientsDto recipientsDto);
+        Task<Result<RecipientsDto>> UpdateRecipientAsync(Guid id, RecipientsDto recipientsDto);
     }
 }

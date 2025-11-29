@@ -10,21 +10,21 @@ namespace PhoneValidate.Infra.Data
         {
         }
 
-        public DbSet<Recipients> Recipients { get; set; }
+        public DbSet<Recipient> Recipients { get; set; }
         public DbSet<History> Histories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Recipients>()
+            modelBuilder.Entity<Recipient>()
                 .HasMany(r => r.Histories)
                 .WithOne(h => h.Recipient)
                 .HasForeignKey(h => h.RecipientId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Configurar índices
-            modelBuilder.Entity<Recipients>()
+            modelBuilder.Entity<Recipient>()
                 .HasIndex(r => r.PhoneNumber)
                 .IsUnique();
 

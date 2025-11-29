@@ -3,10 +3,10 @@ using PhoneValidate.Domain.Service.Models;
 
 namespace PhoneValidate.Infra.Data.Interfaces
 {
-    public interface IRecipientRepository : IBaseRepository<Recipients>
+    public interface IRecipientRepository : IBaseRepository<Recipient>
     {
-        Task<Recipients?> GetByPhoneNumberAsync(string phoneNumber);
-        Task<Recipients?> GetByIdWithHistoriesAsync(Guid id);
-        Task<Recipients?> GetByPhoneNumberWithHistoriesAsync(string phoneNumber);
+        Task<Recipient?> GetByPhoneNumberAsync(string phoneNumber);
+        Task<Recipient?> GetByIdWithHistoriesAsync(Guid id);
+        Task<Recipient?> GetByPhoneNumberWithHistoriesAsync(string phoneNumber);
     }
 }

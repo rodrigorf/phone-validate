@@ -11,12 +11,12 @@ namespace PhoneValidate.Tests
     {
         private readonly RecipientService _service;
         private readonly Mock<ILogger<RecipientService>> _mockLogger;
-        private readonly Mock<IBaseRepository<Recipients>> _mockRepository;
+        private readonly Mock<IBaseRepository<Recipient>> _mockRepository;
 
         public RecipientServiceTests()
         {
             _mockLogger = new Mock<ILogger<RecipientService>>();
-            _mockRepository = new Mock<IBaseRepository<Recipients>>();
+            _mockRepository = new Mock<IBaseRepository<Recipient>>();
             _service = new RecipientService(_mockRepository.Object, _mockLogger.Object);
         }
 
@@ -25,14 +25,14 @@ namespace PhoneValidate.Tests
         {
             // Arrange
             var phone = "+1234567890";
-            var recipients = new Recipients
+            var recipients = new Recipient
             {
                 Id = Guid.NewGuid(),
                 PhoneNumber = phone,
                 UpdatedAt = DateTime.UtcNow
             };
 
-            _mockRepository.Setup(r => r.FirstOrDefaultAsync(It.IsAny<Expression<Func<Recipients, bool>>>()))
+            _mockRepository.Setup(r => r.FirstOrDefaultAsync(It.IsAny<Expression<Func<Recipient, bool>>>()))
                 .ReturnsAsync(recipients);
 
             // Act
@@ -42,22 +42,22 @@ namespace PhoneValidate.Tests
             Assert.NotNull(result);
             Assert.Equal(recipients.Id, result.Id);
             Assert.Equal(phone, result.PhoneNumber);
-            _mockRepository.Verify(r => r.FirstOrDefaultAsync(It.IsAny<Expression<Func<Recipients, bool>>>()), Times.Once);
+            _mockRepository.Verify(r => r.FirstOrDefaultAsync(It.IsAny<Expression<Func<Recipient, bool>>>()), Times.Once);
         }
 
         [Fact]
         public async Task GetRecipientAsync_ShouldReturnNull_WhenNoForecastsExist()
         {
             // Arrange
-            _mockRepository.Setup(r => r.FirstOrDefaultAsync(It.IsAny<Expression<Func<Recipients, bool>>>()))
-                .ReturnsAsync((Recipients)null);
+            _mockRepository.Setup(r => r.FirstOrDefaultAsync(It.IsAny<Expression<Func<Recipient, bool>>>()))
+                .ReturnsAsync((Recipient)null);
 
             // Act
             var result = await _service.GetByPhoneNumberAsync(It.IsAny<string>());
 
             // Assert
             Assert.Null(result);
-            _mockRepository.Verify(r => r.FirstOrDefaultAsync(It.IsAny<Expression<Func<Recipients, bool>>>()), Times.Once);
+            _mockRepository.Verify(r => r.FirstOrDefaultAsync(It.IsAny<Expression<Func<Recipient, bool>>>()), Times.Once);
         }
 
         #region CreateAsync Tests
@@ -66,7 +66,7 @@ namespace PhoneValidate.Tests
         public async Task CreateAsync_ShouldReturnSuccess_WhenRecipientIsValid()
         {
             // Arrange
-            var recipient = new Recipients
+            var recipient = new Recipient
             {
                 PhoneNumber = "+55 11 98765-4321",
                 Histories = new List<History>
@@ -78,10 +78,10 @@ namespace PhoneValidate.Tests
                 }
             };
 
-            _mockRepository.Setup(r => r.AnyAsync(It.IsAny<Expression<Func<Recipients, bool>>>()))
+            _mockRepository.Setup(r => r.AnyAsync(It.IsAny<Expression<Func<Recipient, bool>>>()))
                 .ReturnsAsync(false);
 
-            _mockRepository.Setup(r => r.AddAsync(It.IsAny<Recipients>()))
+            _mockRepository.Setup(r => r.AddAsync(It.IsAny<Recipient>()))
                 .Returns(Task.CompletedTask);
 
             _mockRepository.Setup(r => r.SaveChangesAsync())
@@ -98,8 +98,8 @@ namespace PhoneValidate.Tests
             Assert.Equal("+5511987654321", result.Data.PhoneNumber);
 
             // Verify
-            _mockRepository.Verify(r => r.AnyAsync(It.IsAny<Expression<Func<Recipients, bool>>>()), Times.Once);
-            _mockRepository.Verify(r => r.AddAsync(It.IsAny<Recipients>()), Times.Once);
+            _mockRepository.Verify(r => r.AnyAsync(It.IsAny<Expression<Func<Recipient, bool>>>()), Times.Once);
+            _mockRepository.Verify(r => r.AddAsync(It.IsAny<Recipient>()), Times.Once);
             _mockRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
         }
 
@@ -108,13 +108,13 @@ namespace PhoneValidate.Tests
         {
             // Arrange
             var existingPhoneNumber = "+55 11 98765-4321";
-            var recipient = new Recipients
+            var recipient = new Recipient
             {
                 PhoneNumber = existingPhoneNumber,
                 Histories = new List<History>()
             };
 
-            _mockRepository.Setup(r => r.AnyAsync(It.IsAny<Expression<Func<Recipients, bool>>>()))
+            _mockRepository.Setup(r => r.AnyAsync(It.IsAny<Expression<Func<Recipient, bool>>>()))
                 .ReturnsAsync(true);
 
             // Act
@@ -127,8 +127,8 @@ namespace PhoneValidate.Tests
             Assert.Contains("already exists", result.ErrorMessage, StringComparison.OrdinalIgnoreCase);
             Assert.Contains("+5511987654321", result.ErrorMessage);
 
-            _mockRepository.Verify(r => r.AnyAsync(It.IsAny<Expression<Func<Recipients, bool>>>()), Times.Once);
-            _mockRepository.Verify(r => r.AddAsync(It.IsAny<Recipients>()), Times.Never);
+            _mockRepository.Verify(r => r.AnyAsync(It.IsAny<Expression<Func<Recipient, bool>>>()), Times.Once);
+            _mockRepository.Verify(r => r.AddAsync(It.IsAny<Recipient>()), Times.Never);
             _mockRepository.Verify(r => r.SaveChangesAsync(), Times.Never);
         }
 
@@ -136,7 +136,7 @@ namespace PhoneValidate.Tests
         public async Task CreateAsync_ShouldSetIdAndUpdatedAt_WhenRecipientIsCreated()
         {
             // Arrange
-            var recipient = new Recipients
+            var recipient = new Recipient
             {
                 PhoneNumber = "+55 21 99999-8888",
                 Histories = new List<History>()
@@ -144,10 +144,10 @@ namespace PhoneValidate.Tests
 
             var beforeCreation = DateTime.UtcNow;
 
-            _mockRepository.Setup(r => r.AnyAsync(It.IsAny<Expression<Func<Recipients, bool>>>()))
+            _mockRepository.Setup(r => r.AnyAsync(It.IsAny<Expression<Func<Recipient, bool>>>()))
                 .ReturnsAsync(false);
 
-            _mockRepository.Setup(r => r.AddAsync(It.IsAny<Recipients>()))
+            _mockRepository.Setup(r => r.AddAsync(It.IsAny<Recipient>()))
                 .Returns(Task.CompletedTask);
 
             _mockRepository.Setup(r => r.SaveChangesAsync())
@@ -170,16 +170,16 @@ namespace PhoneValidate.Tests
         public async Task CreateAsync_ShouldAddPlusSign_WhenNotPresent(string phoneNumber)
         {
             // Arrange
-            var recipient = new Recipients
+            var recipient = new Recipient
             {
                 PhoneNumber = phoneNumber,
                 Histories = new List<History>()
             };
 
-            _mockRepository.Setup(r => r.AnyAsync(It.IsAny<Expression<Func<Recipients, bool>>>()))
+            _mockRepository.Setup(r => r.AnyAsync(It.IsAny<Expression<Func<Recipient, bool>>>()))
                 .ReturnsAsync(false);
 
-            _mockRepository.Setup(r => r.AddAsync(It.IsAny<Recipients>()))
+            _mockRepository.Setup(r => r.AddAsync(It.IsAny<Recipient>()))
                 .Returns(Task.CompletedTask);
 
             _mockRepository.Setup(r => r.SaveChangesAsync())
@@ -202,16 +202,16 @@ namespace PhoneValidate.Tests
         public async Task CreateAsync_ShouldReturnNUll_IfNumberInvalid(string phoneNumber)
         {
             // Arrange
-            var recipient = new Recipients
+            var recipient = new Recipient
             {
                 PhoneNumber = phoneNumber,
                 Histories = new List<History>()
             };
 
-            _mockRepository.Setup(r => r.AnyAsync(It.IsAny<Expression<Func<Recipients, bool>>>()))
+            _mockRepository.Setup(r => r.AnyAsync(It.IsAny<Expression<Func<Recipient, bool>>>()))
                 .ReturnsAsync(false);
 
-            _mockRepository.Setup(r => r.AddAsync(It.IsAny<Recipients>()))
+            _mockRepository.Setup(r => r.AddAsync(It.IsAny<Recipient>()))
                 .Returns(Task.CompletedTask);
 
             _mockRepository.Setup(r => r.SaveChangesAsync())

@@ -4,10 +4,10 @@ namespace PhoneValidate.Domain.Service.Interfaces
 {
     public interface IRecipientService
     {
-        Task<Recipients?> GetByPhoneNumberAsync(string phoneNumber);
-        Task<Recipients?> GetByIdAsync(Guid id);
-        Task<Result<Recipients>> CreateAsync(Recipients recipient);
-        Task<Recipients?> UpdateAsync(Guid id, string phoneNumber);
+        Task<Recipient?> GetByPhoneNumberAsync(string phoneNumber);
+        Task<Recipient?> GetByIdAsync(Guid id);
+        Task<Result<Recipient>> CreateAsync(Recipient recipient);
+        Task<Result<Recipient?>> UpdateAsync(Guid id, Recipient recipients);
         Task<bool> DeleteAsync(Guid id);
     }
 }

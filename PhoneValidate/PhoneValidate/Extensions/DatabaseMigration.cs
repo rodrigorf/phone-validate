@@ -13,16 +13,34 @@ namespace PhoneValidate.Extensions
 
             try
             {
-                logger.LogInformation("Applying database migrations for {DbContext}...", typeof(TContext).Name);
-                await dbContext.Database.MigrateAsync();
+                logger.LogInformation("Checking database for {DbContext}...", typeof(TContext).Name);
+                var canConnect = await dbContext.Database.CanConnectAsync();
+                if (canConnect)
+                {
+                    logger.LogInformation("Database exists. Checking for pending migrations...");
 
-                logger.LogInformation("Database migrations completed successfully for {DbContext}.", typeof(TContext).Name);
+                    var pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync();
+                    if (pendingMigrations.Any())
+                    {
+                        logger.LogInformation("Applying {Count} pending migration(s)...", pendingMigrations.Count());
+                        await dbContext.Database.MigrateAsync();
+                        logger.LogInformation("Migrations applied successfully.");
+                    }
+                    else
+                    {
+                        logger.LogInformation("Database is up to date. No migrations needed.");
+                    }
+                }
+                else
+                {
+                    await dbContext.Database.MigrateAsync();
+                    logger.LogInformation("Database created and migrations applied successfully.");
+                }
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "An error occurred while applying database migrations for {DbContext}: {Message}",
                     typeof(TContext).Name, ex.Message);
-
             }
         }
     }

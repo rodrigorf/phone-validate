@@ -2,7 +2,7 @@
 
 namespace PhoneValidate.Domain.Service.Models
 {
-    public class Recipients
+    public class Recipient
     {
         [Required]
         public Guid Id { get; set; }

@@ -14,6 +14,6 @@ namespace PhoneValidate.Domain.Service.Models
         public DateTime CreatedAt { get; set; }
 
         [ForeignKey(nameof(RecipientId))]
-        public Recipients Recipient { get; set; } = null!;
+        public Recipient Recipient { get; set; } = null!;
     }
 }
