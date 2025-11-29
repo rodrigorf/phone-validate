@@ -65,12 +65,6 @@ builder.Services.AddSwaggerConfiguration();
 var app = builder.Build();
 await app.ApplyDatabaseMigrationsAsync<PhoneValidateDbContext>();
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<PhoneValidateDbContext>();
-    db.Database.Migrate();
-}
-
 object value = app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
