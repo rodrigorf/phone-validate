@@ -11,9 +11,9 @@ namespace PhoneValidate.Controllers
     {
         private readonly IRecipientAppService _recipientAppService;
 
-        public RecipientController(IRecipientAppService weatherForecastAppService)
+        public RecipientController(IRecipientAppService recipientAppService)
         {
-            _recipientAppService = weatherForecastAppService;
+            _recipientAppService = recipientAppService;
         }
 
         [Authorize]
@@ -65,6 +65,18 @@ namespace PhoneValidate.Controllers
             }
 
             return Ok(result.Data);
+        }
+
+        [Authorize]
+        [HttpDelete("{id}", Name = "DeleteRecipient")]
+        public async Task<ActionResult> Delete(Guid id)
+        {
+            var result = await _recipientAppService.DeleteRecipientAsync(id);
+
+            if (!result.Success)
+                return NotFound(new { message = result.ErrorMessage });
+
+            return NoContent();
         }
     }
 }

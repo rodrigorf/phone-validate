@@ -40,5 +40,11 @@ namespace PhoneValidate.Application.Service.Services
 
             return Result<RecipientsDto>.Ok(result.Data!.ToDto());
         }
+
+        public async Task<Result<bool>> DeleteRecipientAsync(Guid id)
+        {
+            return await _recipientService.DeleteAsync(id);
+        }
+
     }
 }

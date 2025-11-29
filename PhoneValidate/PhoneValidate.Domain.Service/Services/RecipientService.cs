@@ -91,7 +91,7 @@ namespace PhoneValidate.Domain.Service.Services
             return Result<Recipient?>.Ok(foundRecipient);
         }
 
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<Result<bool>> DeleteAsync(Guid id)
         {
             _logger.LogInformation("Deleting recipient ID: {Id}", id);
 
@@ -99,7 +99,7 @@ namespace PhoneValidate.Domain.Service.Services
             if (recipient == null)
             {
                 _logger.LogWarning("Recipient not found for deletion, ID: {Id}", id);
-                return false;
+                return Result<bool>.Fail($"Recipient with ID '{id}' not found");
             }
 
             _repository.Remove(recipient);
@@ -107,7 +107,7 @@ namespace PhoneValidate.Domain.Service.Services
 
             _logger.LogInformation("Recipient deleted successfully, ID: {Id}", id);
 
-            return true;
+            return Result<bool>.Ok(true);
         }
 
         private string? NormalizePhoneNumber(string phoneNumber)

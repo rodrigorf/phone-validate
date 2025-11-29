@@ -21,7 +21,7 @@ namespace PhoneValidate.Tests
         }
 
         [Fact]
-        public async Task GetRecipientAsync_ShouldReturnFirstForecast_WhenForecastsExist()
+        public async Task GetRecipientAsync_ShouldReturnFirstRecipient_WhenRecipientsExist()
         {
             // Arrange
             var phone = "+1234567890";
@@ -46,7 +46,7 @@ namespace PhoneValidate.Tests
         }
 
         [Fact]
-        public async Task GetRecipientAsync_ShouldReturnNull_WhenNoForecastsExist()
+        public async Task GetRecipientAsync_ShouldReturnNull_WhenNoRecipientsExist()
         {
             // Arrange
             _mockRepository.Setup(r => r.FirstOrDefaultAsync(It.IsAny<Expression<Func<Recipient, bool>>>()))
@@ -227,5 +227,63 @@ namespace PhoneValidate.Tests
         }
         #endregion
 
+        #region DeleteAsync Tests
+
+        [Fact]
+        public async Task DeleteAsync_ShouldReturnSuccess_WhenRecipientExists()
+        {
+            // Arrange
+            var recipientId = Guid.NewGuid();
+            var existingRecipient = new Recipient
+            {
+                Id = recipientId,
+                PhoneNumber = "+5511987654321",
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            _mockRepository.Setup(r => r.GetByIdAsync(recipientId))
+                .ReturnsAsync(existingRecipient);
+
+            _mockRepository.Setup(r => r.SaveChangesAsync())
+                .ReturnsAsync(1);
+
+            // Act
+            var result = await _service.DeleteAsync(recipientId);
+
+            // Assert
+            Assert.True(result.Success);
+            Assert.True(result.Data);
+
+            // Verify
+            _mockRepository.Verify(r => r.GetByIdAsync(recipientId), Times.Once);
+            _mockRepository.Verify(r => r.Remove(existingRecipient), Times.Once);
+            _mockRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
+        }
+
+        [Fact]
+        public async Task DeleteAsync_ShouldReturnFailure_WhenRecipientDoesNotExist()
+        {
+            // Arrange
+            var recipientId = Guid.NewGuid();
+
+            _mockRepository.Setup(r => r.GetByIdAsync(recipientId))
+                .ReturnsAsync((Recipient?)null);
+
+            // Act
+            var result = await _service.DeleteAsync(recipientId);
+
+            // Assert
+            Assert.False(result.Success);
+            Assert.False(result.Data);
+            Assert.NotNull(result.ErrorMessage);
+            Assert.Contains("not found", result.ErrorMessage, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains(recipientId.ToString(), result.ErrorMessage);
+
+            _mockRepository.Verify(r => r.GetByIdAsync(recipientId), Times.Once);
+            _mockRepository.Verify(r => r.Remove(It.IsAny<Recipient>()), Times.Never);
+            _mockRepository.Verify(r => r.SaveChangesAsync(), Times.Never);
+        }
+
+        #endregion
     }
 }
