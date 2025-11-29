@@ -1,13 +1,18 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using PhoneValidate.Application.Service.Services;
+using PhoneValidate.Application.Services.Interfaces;
+using PhoneValidate.Domain.Service.Interfaces;
+using PhoneValidate.Extensions;
 using PhoneValidate.Infra.Data;
-using PhoneValidation.Extensions;
+using PhoneValidate.Infra.Data.Repositories;
+using PhoneValidation.Domain.Service.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Log highlighting
+//Log highlight
 builder.Logging.AddSimpleConsole(options =>
 {
     options.ColorBehavior = Microsoft.Extensions.Logging.Console.LoggerColorBehavior.Enabled;
@@ -24,6 +29,11 @@ builder.Services.AddDbContext<PhoneValidateDbContext>(options =>
 //HealthCheck
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<PhoneValidateDbContext>("database");
+
+//Services
+builder.Services.AddScoped<IRecipientService, RecipientService>();
+builder.Services.AddScoped<IRecipientAppService, RecipientAppService>();
+builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
 //Authentication
 var jwtKey = builder.Configuration["Jwt:Key"]

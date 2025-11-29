@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PhoneValidate.Domain.Service\PhoneValidate.Domain.Service.csproj" />
+  </ItemGroup>
+
 </Project>

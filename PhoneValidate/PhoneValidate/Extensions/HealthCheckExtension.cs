@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using System.Text.Json;
 
-namespace PhoneValidation.Extensions;
+namespace PhoneValidate.Extensions;
 
 public static class HealthCheckExtensions
 {

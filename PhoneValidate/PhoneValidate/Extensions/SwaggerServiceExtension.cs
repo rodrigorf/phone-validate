@@ -1,6 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
 
-namespace PhoneValidation.Extensions
+namespace PhoneValidate.Extensions
 {
     public static class SwaggerServiceExtensions
     {
