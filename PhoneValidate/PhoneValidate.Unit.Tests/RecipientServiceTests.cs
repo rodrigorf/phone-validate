@@ -2,10 +2,10 @@
 using Moq;
 using PhoneValidate.Domain.Service.Interfaces;
 using PhoneValidate.Domain.Service.Models;
-using PhoneValidation.Domain.Service.Services;
+using PhoneValidate.Domain.Service.Services;
 using System.Linq.Expressions;
 
-namespace PhoneValidation.Tests
+namespace PhoneValidate.Tests
 {
     public class RecipientServiceTests
     {

@@ -6,7 +6,7 @@ namespace PhoneValidate.Domain.Service.Interfaces
     {
         Task<Recipients?> GetByPhoneNumberAsync(string phoneNumber);
         Task<Recipients?> GetByIdAsync(Guid id);
-        Task<Recipients> CreateAsync(Recipients recipient);
+        Task<Result<Recipients>> CreateAsync(Recipients recipient);
         Task<Recipients?> UpdateAsync(Guid id, string phoneNumber);
         Task<bool> DeleteAsync(Guid id);
     }

@@ -2,7 +2,7 @@
 using PhoneValidate.Domain.Service.Interfaces;
 using PhoneValidate.Domain.Service.Models;
 
-namespace PhoneValidation.Domain.Service.Services
+namespace PhoneValidate.Domain.Service.Services
 {
     public class RecipientService : IRecipientService
     {
@@ -32,7 +32,7 @@ namespace PhoneValidation.Domain.Service.Services
             return await _repository.GetByIdAsync(id);
         }
 
-        public async Task<Recipients> CreateAsync(Recipients recipient)
+        public async Task<Result<Recipients>> CreateAsync(Recipients recipient)
         {
             _logger.LogInformation("Creating new recipient with phone: {PhoneNumber}", recipient.PhoneNumber);
 
@@ -40,7 +40,7 @@ namespace PhoneValidation.Domain.Service.Services
             if (exists)
             {
                 _logger.LogWarning("Recipient already exists with phone: {PhoneNumber}", recipient.PhoneNumber);
-                throw new InvalidOperationException($"Recipient with phone number {recipient.PhoneNumber} already exists");
+                return Result<Recipients>.Fail($"A recipient with phone number '{recipient.PhoneNumber}' already exists.");
             }
 
             recipient.Id = Guid.NewGuid();
@@ -50,7 +50,7 @@ namespace PhoneValidation.Domain.Service.Services
             await _repository.SaveChangesAsync();
 
             _logger.LogInformation("Recipient created successfully with ID: {Id}", recipient.Id);
-            return recipient;
+            return Result<Recipients>.Ok(recipient);
         }
 
         public async Task<Recipients?> UpdateAsync(Guid id, string phoneNumber)

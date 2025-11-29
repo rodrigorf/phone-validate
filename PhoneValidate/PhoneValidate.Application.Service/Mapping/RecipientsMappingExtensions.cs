@@ -20,14 +20,22 @@ namespace PhoneValidate.Application.Services.Mapping
 
         public static Recipients ToModel(this RecipientsDto? dto)
         {
-            if (dto is null) throw new ArgumentNullException(nameof(dto));
-
-            return new Recipients
+            var recipient = new Recipients
             {
-                Id = dto.Id,
+                Id = Guid.NewGuid(),
                 PhoneNumber = dto.PhoneNumber,
-                UpdatedAt = dto.UpdatedAt
+                UpdatedAt = DateTime.UtcNow,
+                Histories = new List<History>()
             };
+
+            recipient.Histories.Add(new History
+            {
+                Id = Guid.NewGuid(),
+                RecipientId = recipient.Id,
+                CreatedAt = DateTime.UtcNow
+            });
+
+            return recipient;
         }
     }
 }

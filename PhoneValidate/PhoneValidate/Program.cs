@@ -7,7 +7,7 @@ using PhoneValidate.Domain.Service.Interfaces;
 using PhoneValidate.Extensions;
 using PhoneValidate.Infra.Data;
 using PhoneValidate.Infra.Data.Repositories;
-using PhoneValidation.Domain.Service.Services;
+using PhoneValidate.Domain.Service.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,6 +63,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddSwaggerConfiguration();
 
 var app = builder.Build();
+await app.ApplyDatabaseMigrationsAsync<PhoneValidateDbContext>();
 
 using (var scope = app.Services.CreateScope())
 {
