@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using PhoneValidate.Domain.Service.Interfaces;
 using PhoneValidate.Domain.Service.Models;
+using System.Text.RegularExpressions;
 
 namespace PhoneValidate.Domain.Service.Services
 {
@@ -36,6 +37,15 @@ namespace PhoneValidate.Domain.Service.Services
         {
             _logger.LogInformation("Creating new recipient with phone: {PhoneNumber}", recipient.PhoneNumber);
 
+            var normalizedPhone = NormalizePhoneNumber(recipient.PhoneNumber);
+            if (normalizedPhone is null)
+            {
+                var message = $"Phone number '{recipient.PhoneNumber}' is invalid.";
+                _logger.LogWarning(message);
+                return Result<Recipients>.Fail(message);
+            }
+
+            recipient.PhoneNumber = normalizedPhone;
             var exists = await _repository.AnyAsync(r => r.PhoneNumber == recipient.PhoneNumber);
             if (exists)
             {
@@ -98,6 +108,19 @@ namespace PhoneValidate.Domain.Service.Services
             _logger.LogInformation("Recipient deleted successfully, ID: {Id}", id);
 
             return true;
+        }
+
+        private string? NormalizePhoneNumber(string phoneNumber)
+        {
+            if (string.IsNullOrWhiteSpace(phoneNumber))
+                return null;
+
+            var digitsOnly = Regex.Replace(phoneNumber, @"\D", "");
+
+            if (digitsOnly.Length < 10 || digitsOnly.Length > 17)
+                return null;
+
+            return $"+{digitsOnly}";
         }
     }
 }
