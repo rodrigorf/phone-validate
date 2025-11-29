@@ -9,6 +9,7 @@
     <Project Path="PhoneValidate/PhoneValidate.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="PhoneValidate.E2E.Tests/PhoneValidate.E2E.Tests.csproj" Id="19711e95-b84b-4b09-83f2-2fb8bb1084f8" />
     <Project Path="PhoneValidate.Unit.Tests/PhoneValidate.Unit.Tests.csproj" Id="a911727f-b224-4732-9c43-6661919d835d" />
   </Folder>
 </Solution>
