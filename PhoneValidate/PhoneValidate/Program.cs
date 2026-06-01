@@ -81,3 +81,6 @@ app.MapHealthCheckEndpoint();
 app.MapControllers();
 
 app.Run();
+
+// Exposed for integration tests (WebApplicationFactory<Program>).
+public partial class Program { }
