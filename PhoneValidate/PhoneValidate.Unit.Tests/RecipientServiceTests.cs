@@ -191,7 +191,7 @@ namespace PhoneValidate.Tests
             // Assert
             Assert.True(result.Success);
             Assert.NotNull(result.Data);
-            Assert.StartsWith("+", result.Data.PhoneNumber);  
+            Assert.StartsWith("+", result.Data.PhoneNumber);
         }
 
         [Theory]
