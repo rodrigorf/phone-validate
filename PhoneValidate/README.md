@@ -1,5 +1,8 @@
 # PhoneValidate API — .NET Clean Architecture Template
 
+[![CI](https://github.com/rodrigorf/phone-validate/actions/workflows/ci.yml/badge.svg)](https://github.com/rodrigorf/phone-validate/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A production-style REST API template built with **.NET 10**, **Clean Architecture**, **Entity Framework Core**, **JWT authentication**, and a full **Docker Compose** setup. Clone it, run one command, and you have a working API with a database, auth, Swagger, health checks, and tests.
 
 > Ideal as a starting point for new services or as a reference for how to wire up a clean, layered .NET API.
