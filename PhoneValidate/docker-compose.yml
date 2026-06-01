@@ -6,9 +6,10 @@ services:
       dockerfile: PhoneValidate/Dockerfile
     environment:
       - ASPNETCORE_URLS=http://+:8080
-      - ConnectionStrings__Default=Server=mssql,1433;Database=PhoneValidateDb;User Id=SA;Password=Senha123!;TrustServerCertificate=True
+      - ConnectionStrings__Default=Server=mssql,1433;Database=PhoneValidateDb;User Id=SA;Password=${DB_PASSWORD};TrustServerCertificate=True
+      - Jwt__Key=${JWT_KEY}
     ports:
-      - "50000:8080"
+      - "5000:8080"
     depends_on:
       mssql:
         condition: service_healthy
@@ -18,7 +19,7 @@ services:
       hostname: mssql
       environment:    
         ACCEPT_EULA: "Y"
-        SA_PASSWORD: "Senha123!" 
+        SA_PASSWORD: ${DB_PASSWORD}
       ports:
         - "1433:1433" 
       volumes:

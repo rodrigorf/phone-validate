@@ -7,6 +7,7 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["PhoneValidate/PhoneValidate.csproj", "PhoneValidate/"]
+COPY ["PhoneValidate.Application.Service/PhoneValidate.Application.Service.csproj", "PhoneValidate.Application.Service/"]
 COPY ["PhoneValidate.Infra.Data/PhoneValidate.Infra.Data.csproj", "PhoneValidate.Infra.Data/"]
 COPY ["PhoneValidate.Domain.Service/PhoneValidate.Domain.Service.csproj", "PhoneValidate.Domain.Service/"]
 RUN dotnet restore "PhoneValidate/PhoneValidate.csproj"
