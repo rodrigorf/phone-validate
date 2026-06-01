@@ -16,7 +16,7 @@ namespace PhoneValidationE2E.Tests.StepDefinitions
         private string _lastGeneratedPhoneNumber = string.Empty;
 
         private readonly string _baseUrl = Environment.GetEnvironmentVariable("API_BASE_URL")
-            ?? "http://localhost:50000";
+            ?? "http://localhost:5000";
 
         [Given(@"the API is running")]
         public void GivenTheAPIIsRunning()
@@ -75,6 +75,13 @@ namespace PhoneValidationE2E.Tests.StepDefinitions
             _response = await _client.GetAsync(uri);
         }
 
+        [When(@"I call GET for the last created recipient")]
+        public async Task WhenICallGETForTheLastCreatedRecipient()
+        {
+            var uri = $"/Recipient?phoneNumber={Uri.EscapeDataString(_lastGeneratedPhoneNumber)}";
+            _response = await _client.GetAsync(uri);
+        }
+
         [Then(@"I should receive status code (.*)")]
         public void ThenIShouldReceiveStatusCode(int expectedStatusCode)
         {
@@ -103,6 +110,7 @@ namespace PhoneValidationE2E.Tests.StepDefinitions
         [When(@"I create a recipient with phone number ""(.*)""")]
         public async Task WhenICreateARecipientWithPhoneNumber(string phoneNumber)
         {
+            _lastGeneratedPhoneNumber = phoneNumber;
             var createRequest = new
             {
                 phoneNumber

@@ -12,7 +12,7 @@ Scenario: Get Recipient with valid authentication
     Then I should receive a valid JWT token
     When I create a recipient with a unique phone number
     Then I should receive status code 201
-    When I call GET "/Recipient" with "phoneNumber" equals to "+5579999810687"
+    When I call GET for the last created recipient
     Then I should receive status code 200
     And the response should contain recipient data
 

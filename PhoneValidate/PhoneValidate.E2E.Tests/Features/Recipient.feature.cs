@@ -154,7 +154,7 @@ this.FeatureBackground();
     testRunner.Then("I should receive status code 201", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 15
-    testRunner.When("I call GET \"/Recipient\" with \"phoneNumber\" equals to \"+5579999810687\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+    testRunner.When("I call GET for the last created recipient", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 16
     testRunner.Then("I should receive status code 200", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
