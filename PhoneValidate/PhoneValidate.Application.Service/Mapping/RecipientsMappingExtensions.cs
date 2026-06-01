@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using PhoneValidate.Application.Services.Dto;
 using PhoneValidate.Domain.Service.Models;
 
@@ -5,6 +6,7 @@ namespace PhoneValidate.Application.Services.Mapping
 {
     public static class RecipientsMappingExtensions
     {
+        [return: NotNullIfNotNull(nameof(source))]
         public static RecipientsDto? ToDto(this Recipient? source)
         {
             if (source is null)
@@ -18,7 +20,7 @@ namespace PhoneValidate.Application.Services.Mapping
             };
         }
 
-        public static Recipient ToModel(this RecipientsDto? dto)
+        public static Recipient ToModel(this RecipientsDto dto)
         {
             var recipient = new Recipient
             {

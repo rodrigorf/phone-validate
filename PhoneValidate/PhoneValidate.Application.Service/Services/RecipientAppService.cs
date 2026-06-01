@@ -15,7 +15,7 @@ namespace PhoneValidate.Application.Service.Services
             _recipientService = recipientService;
         }
 
-        public async Task<RecipientsDto> GetRecipientAsync(string phoneNumber)
+        public async Task<RecipientsDto?> GetRecipientAsync(string phoneNumber)
         {
             var result = await _recipientService.GetByPhoneNumberAsync(phoneNumber);
             return result.ToDto();

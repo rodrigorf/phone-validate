@@ -50,7 +50,7 @@ namespace PhoneValidate.Tests
         {
             // Arrange
             _mockRepository.Setup(r => r.FirstOrDefaultAsync(It.IsAny<Expression<Func<Recipient, bool>>>()))
-                .ReturnsAsync((Recipient)null);
+                .ReturnsAsync((Recipient?)null);
 
             // Act
             var result = await _service.GetByPhoneNumberAsync(It.IsAny<string>());
